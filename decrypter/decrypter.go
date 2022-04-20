@@ -25,9 +25,11 @@ func main() {
 
 	text = strings.Replace(text, "\n", "", -1)
 
-	key, err := hex.DecodeString(text)
+	finalText := hex.EncodeToString([]byte(text))
+
+	key, err := hex.DecodeString(finalText)
 	if err != nil {
-		fmt.Println("Wrong key.")
+		fmt.Println(err, "Wrong key.")
 	} else {
 
 		files := explorer.MapFiles(dir)
