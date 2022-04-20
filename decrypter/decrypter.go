@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	dir := "/" // Insert starting directory
+	//dir := "/" // Insert starting directory
 
 	fmt.Print("Decrypter \nInsert decrypt key:")
 
@@ -32,7 +32,7 @@ func main() {
 		log.Println(err, "Wrong key.")
 	} else {
 
-		files := explorer.MapFiles(dir)
+		files := explorer.MapFiles()
 
 		for _, v := range files {
 			file, err := ioutil.ReadFile(v)
