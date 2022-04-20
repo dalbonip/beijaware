@@ -41,7 +41,7 @@ func MapFiles() []string {
 		if isRoot() {
 			root = "/"
 		} else {
-			root += ""
+			root += "/"
 		}
 	}
 
