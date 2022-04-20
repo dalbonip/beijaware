@@ -37,6 +37,7 @@ func main() {
 		for _, v := range files {
 			file, err := ioutil.ReadFile(v)
 			if err != nil {
+				//log.Println("erro aqui: file, err := ioutil.ReadFile(v): ", file)
 				continue
 			}
 			if len(file) == 0 {
@@ -45,11 +46,13 @@ func main() {
 
 			decrypted, err := Decrypt(file, key)
 			if err != nil {
+				//log.Println("erro aqui: decrypted, err := Decrypt(file, key)")
 				continue
 			}
 
 			err = ioutil.WriteFile(v, decrypted, 0644)
 			if err != nil {
+				//log.Println("erro aqui: WriteFile")
 				continue
 			}
 		}
@@ -63,16 +66,19 @@ func main() {
 func Decrypt(cypherText []byte, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
+		//log.Println("erro aqui: block, err := aes.NewCipher(key)")
 		return nil, err
 	}
 
 	gcm, err := cipher.NewGCM(block)
 	if err != nil {
+		//log.Println("erro aqui: gcm, err := cipher.NewGCM(block)")
 		return nil, err
 	}
 
 	plainText, err := gcm.Open(nil, cypherText[:gcm.NonceSize()], cypherText[gcm.NonceSize():], nil)
 	if err != nil {
+		//log.Println("erro aqui: plainText, err := gcm.Open(nil, cypherText[:gcm.NonceSize()], cypherText[gcm.NonceSize():], nil)")
 		return nil, err
 	}
 
